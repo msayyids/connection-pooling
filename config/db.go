@@ -10,8 +10,6 @@ import (
 	"github.com/joho/godotenv"
 )
 
-var dbPool *pgxpool.Pool
-
 func InitDb() *pgxpool.Pool {
 
 	if err := godotenv.Load(); err != nil {
@@ -31,6 +29,12 @@ func InitDb() *pgxpool.Pool {
 		log.Fatal("Error connecting to the database: ", err)
 	}
 
-	dbPool = pool // Assign the pool to the global variable
-	return dbPool
+	conn, err := pool.Acquire(context.Background())
+	if err != nil {
+		log.Fatalf("error acquiring connection from pool : %v", err)
+	}
+
+	defer conn.Release()
+
+	return pool
 }
