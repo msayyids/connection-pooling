@@ -32,5 +32,5 @@ func InitDb() *pgxpool.Pool {
 	}
 
 	dbPool = pool // Assign the pool to the global variable
-	return pool
+	return dbPool
 }
